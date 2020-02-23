@@ -1,0 +1,32 @@
+{
+  "name": "jest-html-tree-reporter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc src/* --outDir lib",
+    "watch": "tsc -w src/* --outDir lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maximeag/jest-html-tree-reporter.git"
+  },
+  "keywords": [],
+  "author": "Maxime Agusti",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maximeag/jest-html-tree-reporter/issues"
+  },
+  "homepage": "https://github.com/maximeag/jest-html-tree-reporter#readme",
+  "devDependencies": {
+    "@types/jest": "^24.9.1",
+    "@types/node": "^13.5.0",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "mkdirp": "^1.0.3",
+    "swig-templates": "^2.0.3",
+    "uuid": "^3.4.0"
+  }
+}

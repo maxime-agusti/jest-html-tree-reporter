@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        .el-table .passed {
+            background: #67C23A;
+        }
+
+        .el-table .failed {
+            background: #F56C6C;
+        }
+
+        .el-table .pending {
+            background: #E6A23C;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>{{ report.getName() }}</h1>
+    <h2>Start: {{ datetime }}</h2>
+    <h4>{{ report.getNumberOfTests() }} tests -- {{ report.getNumberOfTests('passed') }} passed /
+        {{ report.getNumberOfTests('failed') }} failed / {{ report.getNumberOfTests('pending') }} pending</h4>
+    <div id="app">
+        {% for child in report.getChildren() %}
+        <el-table :data="tables[{{ loop.index0 }}]" style="width: 100%" row-key="id" border lazy :load="load"
+            :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :row-class-name="tableRowClassName">
+            <el-table-column prop="name" label="{{ child.getName() }}">
+            </el-table-column>
+            <el-table-column prop="status" label="Status">
+            </el-table-column>
+        </el-table>
+        <br>
+        {% endfor %}
+    </div>
+</body>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    fetch('data/{{ report.getId() }}.json')
+        .then(res => res.json())
+        .then(reports => {
+            Promise.all(reports.map(r => fetch(`data/${r.id}.json`)))
+                .then(res => Promise.all(res.map(r => r.json())))
+                .then(tables => {
+                    new Vue({
+                        el: '#app',
+                        data() {
+                            return {
+                                tables,
+                            }
+                        },
+                        methods: {
+                            load(tree, treeNode, resolve) {
+                                fetch(`data/${tree.id}.json`)
+                                    .then(res => {
+                                        res.json().then(resolve);
+                                    });
+                            },
+                            tableRowClassName({ row, rowIndex }) {
+                                return row.status;
+                            },
+                        },
+                    });
+                });
+        });
+</script>
+
+</html>
